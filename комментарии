@@ -1,61 +1,48 @@
   // or
  //import * as goodsAPI from './api/goods';
 class App extends React.Component {
-  state ={
-    goods: []
-  }
-  showAll = () => {
-    getAll()// Заготовленный метод импортируется из './api/goods
-    .then(goods => {
-      this.setState({
-        goods // goods: goods
-      })
-    });
+  state = {
+    goods: [],
   }
 
-  show5First = () => {
-    get5First()
-      .then(goods => (
+  showGoods = (callback) => {
+    callback() // Заготовленный метод передаётся по клику, перед этим импортируется из './api/goods
+      .then((goods) => {
         this.setState({
-          goods
-        })
-      ))
-  }
-  showRedGoods = () => {
-    getRed()
-      .then(goods => (
-        this.setState({
-          goods
-        })
-      ))
+          goods, // goods: goods
+        });
+      });
   }
 
   render() {
-    const {goods} = this.state;
+    const { goods } = this.state;
+  
     return (
       <main>
         <h1>Dynamic list of Goods</h1>
         <button
           type="button"
-          onClick={this.showAll}
+          //Каждый импортированный методпередаётся коллбэком по клику на свою кнопку, чтобы получать результаты промисов в одной функции
+          onClick={() => this.showGoods(getAll)}
         >
           Load all goods
         </button>
         <button
           type="button"
-          onClick={this.show5First}
+          onClick={() => this.showGoods(get5First)}
         >
           Load 5 first goods
         </button>
         <button
           type="button"
-          onClick={this.showRedGoods}
+          onClick={() => this.showGoods(getRed)}
         >
           Load red goods
         </button>
-        <GoodsList goods={goods}/>
+        <GoodsList goods={goods} />
       </main>
-      )
-    }
+    );
+  }
 }
-  
+
+export default App;
